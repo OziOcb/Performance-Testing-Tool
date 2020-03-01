@@ -4,6 +4,12 @@
 const arr = [];
 for (let i = 0; i < 100000; i++) arr.push(i);
 
+const NUM_OF_TESTS = 100;
+let case01wins = 0;
+let case02wins = 0;
+let timeDiffSmallest = 100;
+let timeDiffLargest = 0;
+
 function performanceTest(callback) {
   const a1 = performance.now();
   callback();
@@ -11,9 +17,6 @@ function performanceTest(callback) {
   return a2 - a1;
 }
 
-let case01wins = 0;
-let case02wins = 0;
-const NUM_OF_TESTS = 100;
 for (let i = 0; i < NUM_OF_TESTS; i++) {
   const testA = performanceTest(case01);
   const testB = performanceTest(case02);
@@ -26,13 +29,19 @@ for (let i = 0; i < NUM_OF_TESTS; i++) {
     winner = "SECOND";
     case02wins++;
   }
-  const winnerBy = Math.abs(testA - testB);
-  const str = `${winner} test wins by ${winnerBy} ms`;
+  const timeDiff = Math.abs(testA - testB);
+  timeDiff > timeDiffLargest ? (timeDiffLargest = timeDiff) : null;
+  timeDiff < timeDiffSmallest ? (timeDiffSmallest = timeDiff) : null;
+
+  const str = `${winner} test wins by ${timeDiff} ms`;
   console.log(str);
 }
 console.log("----------------------------");
 console.log("CASE_01 wins ->", case01wins, "out of", NUM_OF_TESTS);
 console.log("CASE_02 wins ->", case02wins, "out of", NUM_OF_TESTS);
+console.log("----------------------------");
+console.log("Smallest time diff ->", timeDiffSmallest);
+console.log("Largest time diff ->", timeDiffLargest);
 
 // ---------------------------------------------------------------------------
 // TESTS
